@@ -18,16 +18,27 @@ class Category
     categories
   end
 
+  define_singleton_method(:find) do |id|
+    found_category = nil
+    Category.all().each() do |category|
+      if category.id().eql?(id)
+        found_category = category
+      end
+    end
+    found_category
+  end
+
   define_method(:save) do
     result = DB.exec("INSERT INTO categories (name) VALUES ('#{@name}') RETURNING id;")
     @id = result.first().fetch("id").to_i()
   end
 
+  define_method(:expenses) do |id|
+    results = DB.exec("SELECT amount FROM expenses;")
+  end
 
   define_method(:==) do |another_category|
     self.name().==(another_category.name()).&(self.id().==(another_category.id()))
   end
-
-
 
 end

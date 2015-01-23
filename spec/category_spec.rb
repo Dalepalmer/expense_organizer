@@ -8,6 +8,16 @@ describe(Category) do
     end
   end
 
+    describe(".find") do
+    it("returns as list of categories by their ID number") do
+      test_category = Category.new({:name => "Food", :id => nil})
+      test_category.save()
+      test_category2 = Category.new({:name => "Booze", :id => nil})
+      test_category2.save()
+      expect(Category.find(test_category2.id())).to(eq(test_category2))
+    end
+  end
+
   describe("#save") do
     it("lets you save categories to the database") do
       category = Category.new({:name => "Booze", :id => nil})
@@ -31,13 +41,17 @@ describe(Category) do
     end
   end
 
-  # describe("#add_category") do
-  #   it("associates an expense with a category") do
-  #     category = Category.new({:name => "Pizza", :id => nil})
-  #     category.save()
-  #     expense = Expense.new({:id => nil, :amount => 25.00})
-  #     expense.save()
-
+  describe("#add_expense") do
+    it("associates an expense with a category") do
+      category = Category.new({:name => "Food", :id => nil})
+      category.save()
+      expense = Expense.new({:amount => 120.00, :id => nil, :date => 20150120})
+      expense.save()
+      the_company = Company.new({:category_id => category.id(), :expense_id => expense.id()})
+      the_company.save()
+      expect(Company.all()).to(eq([the_company]))
+    end
+  end
 
   describe("#==") do
     it("makes sure categories are equal if the share a name") do
